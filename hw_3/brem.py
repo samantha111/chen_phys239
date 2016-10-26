@@ -11,18 +11,18 @@ import matplotlib.mlab as mlab
 
 
 #### ===================  ####
-
 e = e.gauss.value
 a0 = a0.cgs.value
 m_e = m_e.cgs.value
 ####============######
-Z = 79
-x0 = 8000
-y0 = 8000
-v0 = -1E7
+Z = 100
+x0 = 1E7
+y0 = 1E5
+v0 = -2E8
 Zee = Z * e**2
 
-
+niter = 400
+dt = 1E-13
 ###### ==== at t=0  ======= ########
 
 p = [np.array([x0,y0])* a0 ]            ##position(x,y)
@@ -31,23 +31,21 @@ v = [np.array([v0, 0])]
 a = [np.array(-Zee/ m_e / r[0]**3 * p[0])]        ###acceleration (ax,ay)
 t = [0]
 
-dt = 1E-13
+
 ###########
 
 
-for i in range (1, 50):
+for i in range (1, niter):
     p.append(p[i-1] + v[i-1] * dt + a[i-1] * dt**2 / 2)
     r.append(np.sqrt(np.sum(p[i]**2)))
     v.append(v[i-1] + a[i-1] * dt)
     a.append(-Zee/m_e/r[i]**3 * p[i])
     t.append( t[i-1] + dt)
 ##########################
-p = np.array(p) / a0     # Converting back to a0
-r = np.array(r) / a0     # Converting back to a0
-v = np.array(v)          # Converting back to cm/s
-a = np.array(a)          # Converting back to cm/s**2
+p = np.array(p) /a0     
+v = np.array(v)          
+a = np.array(a)          
 t = np.array(t)
-
 xy=['x','y']
 
 
@@ -55,7 +53,6 @@ xy=['x','y']
 ######  x-y plot #####
 
 plt.figure()
-
 plt.scatter(p[:, 0], p[:, 1],color="orange")
 plt.xlim([np.min(p[:, 0]), np.max(p[:, 0])])
 plt.ylim([np.min(p[:, 1]), np.max(p[:, 1])])        
